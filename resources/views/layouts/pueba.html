@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es" class="light"> {{-- 'light' class para el tema predeterminado, se alterna con JS --}}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control Tecno Plus Toys</title>
+    @vite('resources/css/app.css') {{-- O incluye tu CSS compilado --}}
+    {{-- Incluye Font Awesome u otra librería de íconos --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    @vite('resources/js/app.js') {{-- Para Alpine.js o JS personalizado --}}
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="flex h-screen" x-data="themeSwitcher"> {{-- x-data para Alpine.js --}}
+        <aside class="w-64 bg-tecno-red text-white flex flex-col fixed h-full">
+            <div class="p-6 text-2xl font-bold border-b border-white border-opacity-20">
+                <i class="fas fa-robot mr-2"></i> Tecno Plus Toys
+            </div>
+
+            <nav class="flex-grow py-4">
+                <ul>
+                    <li class="px-6 py-3 hover:bg-black hover:bg-opacity-10 transition-colors duration-200 cursor-pointer">
+                        <a href="#" class="flex items-center"><i class="fas fa-home mr-3"></i> Inicio</a>
+                    </li>
+                    <li class="px-6 py-3 bg-black bg-opacity-20"> {{-- Ejemplo de estado activo --}}
+                        <a href="#" class="flex items-center"><i class="fas fa-tachometer-alt mr-3"></i> Panel de Control</a>
+                    </li>
+                    <li class="px-6 py-3 hover:bg-black hover:bg-opacity-10 transition-colors duration-200 cursor-pointer">
+                        <a href="#" class="flex items-center"><i class="fas fa-photo-video mr-3"></i> Medios</a>
+                    </li>
+                    <li class="px-6 py-3 hover:bg-black hover:bg-opacity-10 transition-colors duration-200 cursor-pointer">
+                        <a href="#" class="flex items-center"><i class="fas fa-database mr-3"></i> Base de Datos</a>
+                    </li>
+                    <li class="px-6 py-3 hover:bg-black hover:bg-opacity-10 transition-colors duration-200 cursor-pointer">
+                        <a href="#" class="flex items-center"><i class="fas fa-chart-line mr-3"></i> Actividad</a>
+                    </li>
+                    <div class="border-t border-white border-opacity-20 my-4 mx-6"></div>
+                    <li class="px-6 py-3 hover:bg-black hover:bg-opacity-10 transition-colors duration-200 cursor-pointer">
+                        <a href="#" class="flex items-center"><i class="fas fa-paint-brush mr-3"></i> Apariencia</a>
+                    </li>
+                    <li class="px-6 py-3 hover:bg-black hover:bg-opacity-10 transition-colors duration-200 cursor-pointer">
+                        <a href="#" class="flex items-center"><i class="fas fa-tools mr-3"></i> Herramientas</a>
+                    </li>
+                    <li class="px-6 py-3 hover:bg-black hover:bg-opacity-10 transition-colors duration-200 cursor-pointer">
+                        <a href="#" class="flex items-center"><i class="fas fa-puzzle-piece mr-3"></i> Complementos</a>
+                    </li>
+                    <li class="px-6 py-3 hover:bg-black hover:bg-opacity-10 transition-colors duration-200 cursor-pointer">
+                        <a href="#" class="flex items-center"><i class="fas fa-cogs mr-3"></i> Configuración</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="p-6 border-t border-white border-opacity-20">
+                <div class="text-xs mb-2">Tema</div>
+                <div class="flex bg-black bg-opacity-20 rounded-full p-1 text-sm">
+                    <button class="flex-1 text-center py-1 rounded-full" :class="{'bg-tecno-red text-white': theme === 'dark', 'text-white': theme === 'light'}" @click="toggleTheme('dark')">Oscuro</button>
+                    <button class="flex-1 text-center py-1 rounded-full" :class="{'bg-tecno-red text-white': theme === 'light', 'text-white': theme === 'dark'}" @click="toggleTheme('light')">Claro</button>
+                </div>
+                <div class="flex items-center justify-between mt-4">
+                    <span class="text-sm">Marcos</span>
+                    <label class="switch">
+                        <input type="checkbox" checked> {{-- Necesitarás CSS para el interruptor --}}
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+        </aside>
+
+        <div class="flex-1 flex flex-col ml-64"> {{-- Margen izquierdo para la barra lateral fija --}}
+            <header class="bg-white shadow-sm p-4 flex items-center justify-between z-10">
+                <div class="text-xl font-semibold text-gray-800">Dashboard</div>
+                <div class="flex items-center space-x-4">
+                    <button class="text-gray-600 hover:text-gray-800"><i class="fas fa-bell"></i></button>
+                    <button class="text-gray-600 hover:text-gray-800"><i class="fas fa-user-circle"></i></button>
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600 transition-colors duration-200">Actualizar</button>
+                </div>
+            </header>
+
+            <main class="flex-1 p-6 bg-gray-100 overflow-y-auto">
+                @yield('content')
+            </main>
+        </div>
+    </div>
+
+    {{-- Alpine.js para la alternancia de temas (ejemplo) --}}
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('themeSwitcher', () => ({
+                theme: localStorage.getItem('theme') || 'light',
+                init() {
+                    this.applyTheme();
+                },
+                toggleTheme(newTheme) {
+                    this.theme = newTheme;
+                    localStorage.setItem('theme', newTheme);
+                    this.applyTheme();
+                },
+                applyTheme() {
+                    if (this.theme === 'dark') {
+                        document.documentElement.classList.add('dark');
+                        document.documentElement.classList.remove('light');
+                    } else {
+                        document.documentElement.classList.add('light');
+                        document.documentElement.classList.remove('dark');
+                    }
+                }
+            }));
+        });
+    </script>
+</body>
+</html>
