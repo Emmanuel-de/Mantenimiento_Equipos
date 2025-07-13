@@ -104,6 +104,9 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        // Asignar rol por defecto (usuario)
+        $user->assignRole('usuario');
+
         // Autenticar automáticamente
         Auth::login($user);
 

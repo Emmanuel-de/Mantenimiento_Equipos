@@ -1,14 +1,35 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Incidencia;
 use App\Models\Equipo;
+use App\Models\Catalogo\TipoIncidencia;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 
 class IncidenciaController extends Controller
 {
+    /**
+     * Ver incidencias del usuario actual
+     */
+    public function misIncidencias()
+    {
+        $user = Auth::user();
+
+        // Si es administrador o técnico, puede ver todas
+        if ($user->hasRole(['administrador', 'tecnico'])) {
+            $incidencias = Incidencia::with(['equipo', 'tipoIncidencia'])->get();
+        } else {
+            // Usuario común solo ve sus incidencias
+            $incidencias = Incidencia::whereHas('equipo.empleado', function($query) use ($user) {
+                $query->where('email', $user->email);
+            })->with(['equipo', 'tipoIncidencia'])->get();
+        }
+
+        return view('incidencias.mis', compact('incidencias'));
+    }
     public function index()
     {
         $incidencias = Incidencia::with('equipo')->orderByDesc('fecha')->get();

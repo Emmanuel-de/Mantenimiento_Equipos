@@ -1,9 +1,9 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 use App\Models\Equipo;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Incidencia;
 use App\Models\Empleado;
 use App\Models\Departamento;
@@ -11,6 +11,25 @@ use Illuminate\Http\Request;
 
 class EquipoController extends Controller
 {
+    /**
+     * Ver equipos del usuario actual
+     */
+    public function misEquipos()
+    {
+        $user = Auth::user();
+        
+        // Si es administrador, puede ver todos
+        if ($user->hasRole('administrador')) {
+            $equipos = Equipo::with(['empleado', 'departamento'])->get();
+        } else {
+            // Usuario común o técnico solo ve sus equipos asignados
+            $equipos = Equipo::whereHas('empleado', function($query) use ($user) {
+                $query->where('email', $user->email);
+            })->with(['empleado', 'departamento'])->get();
+        }
+        
+        return view('equipos.mis', compact('equipos'));
+    }
     public function index()
     {
         // Obtener equipos con la relación departamento para no hacer consultas repetidas
