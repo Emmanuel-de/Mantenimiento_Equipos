@@ -8,6 +8,9 @@ use App\Models\Departamento;
 use App\Models\Mantenimiento;
 use App\Models\Incidencia;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel; // Asegúrate de tener esta línea
+use App\Exports\ReporteGeneralExport; // Asegúrate de tener esta línea
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ReporteController extends Controller
 {
@@ -31,44 +34,44 @@ class ReporteController extends Controller
         // ====================
         // FILTROS MANTENIMIENTO
         // ====================
-        $mantenimientos = Mantenimiento::with('equipo');
+        $mantenimientosQuery = Mantenimiento::with('equipo'); // Usamos una variable query para poder encadenar
 
         if ($departamentoId) {
-            $mantenimientos->whereHas('equipo', function ($q) use ($departamentoId) {
+            $mantenimientosQuery->whereHas('equipo', function ($q) use ($departamentoId) {
                 $q->where('departamento_id', $departamentoId);
             });
         }
 
         if ($tipoMantenimiento) {
-            $mantenimientos->where('tipo', $tipoMantenimiento);
+            $mantenimientosQuery->where('tipo', $tipoMantenimiento);
         }
 
         if ($fechaInicio) {
-            $mantenimientos->whereDate('fecha', '>=', $fechaInicio);
+            $mantenimientosQuery->whereDate('fecha', '>=', $fechaInicio);
         }
 
-        $mantenimientos = $mantenimientos->get();
+        $mantenimientos = $mantenimientosQuery->get(); // Obtener los resultados al final
 
         // ====================
         // FILTROS INCIDENCIAS
         // ====================
-        $incidencias = Incidencia::with('equipo');
+        $incidenciasQuery = Incidencia::with('equipo'); // Usamos una variable query
 
         if ($departamentoId) {
-            $incidencias->whereHas('equipo', function ($q) use ($departamentoId) {
+            $incidenciasQuery->whereHas('equipo', function ($q) use ($departamentoId) {
                 $q->where('departamento_id', $departamentoId);
             });
         }
 
         if ($estadoIncidencia) {
-            $incidencias->where('estado', $estadoIncidencia);
+            $incidenciasQuery->where('estado', $estadoIncidencia);
         }
 
         if ($fechaInicio) {
-            $incidencias->whereDate('fecha', '>=', $fechaInicio);
+            $incidenciasQuery->whereDate('fecha', '>=', $fechaInicio);
         }
 
-        $incidencias = $incidencias->get();
+        $incidencias = $incidenciasQuery->get(); // Obtener los resultados al final
 
         // ====================
         // Departamentos (para el filtro)
@@ -76,5 +79,36 @@ class ReporteController extends Controller
         $departamentos = Departamento::all();
 
         return view('reportes.index', compact('mantenimientos', 'incidencias', 'departamentos'));
+    }
+
+    public function exportarReporteGeneralExcel(Request $request) // <--- Aquí pasamos el Request
+    {
+        $departamentoId = $request->input('departamento_id');
+        $tipoMantenimiento = $request->input('tipo_mantenimiento');
+        $estadoIncidencia = $request->input('estado_incidencia');
+        $periodo = $request->input('periodo');
+
+        // Pasa los filtros a la clase de exportación principal
+        return Excel::download(
+            new ReporteGeneralExport($departamentoId, $tipoMantenimiento, $estadoIncidencia, $periodo),
+            'reporte_general.xlsx'
+        );
+    }
+
+    public function exportPdf()
+    {
+        $mantenimientos = Mantenimiento::all(); // Obtén tus datos de Mantenimientos
+        $incidencias = Incidencia::all(); // Obtén tus datos de Incidencias
+
+        $data = [
+            'mantenimientos' => $mantenimientos,
+            'incidencias' => $incidencias
+        ];
+
+        $pdf = Pdf::loadView('pdf.reporte_incidencias', $data);
+
+        // Puedes descargar el PDF directamente o mostrarlo en el navegador
+        return $pdf->download('reporte_general.pdf'); // Descargar el archivo
+        // return $pdf->stream('reporte_general.pdf'); // Mostrar en el navegador
     }
 }

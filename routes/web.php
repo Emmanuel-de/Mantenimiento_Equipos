@@ -110,3 +110,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/mis-equipos', [EquipoController::class, 'misEquipos'])->name('equipos.mis');
     });
 });
+
+Route::get('/exportar-reporte-general-excel', [ReporteController::class, 'exportarReporteGeneralExcel'])->name('exportar.reporte.general.excel');
+Route::get('/exportar-pdf', [ReporteController::class, 'exportPdf'])->name('exportar.pdf');

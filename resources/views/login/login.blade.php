@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Sistema Neón</title>
+    <title>Login - Tecno Plus Toys</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
         * {
@@ -13,8 +13,8 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #0c0c0c, #1a1a2e, #16213e);
+            font-family: 'Segoe UI', sans-serif;
+            background: #111;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -23,88 +23,70 @@
             position: relative;
         }
 
-        /* Efectos de fondo animados */
-        .bg-animation {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
-        .neon-circle {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(2px);
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .neon-circle:nth-child(1) {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(45deg, #ff006e, #8338ec);
-            top: 20%;
-            left: 10%;
-            box-shadow: 0 0 30px #ff006e, 0 0 60px #ff006e;
-            animation-delay: 0s;
-        }
-
-        .neon-circle:nth-child(2) {
-            width: 120px;
-            height: 120px;
-            background: linear-gradient(45deg, #06ffa5, #00d4ff);
-            top: 60%;
-            left: 80%;
-            box-shadow: 0 0 40px #06ffa5, 0 0 80px #06ffa5;
-            animation-delay: 2s;
-        }
-
-        .neon-circle:nth-child(3) {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(45deg, #ffbe0b, #fb8500);
-            top: 80%;
-            left: 20%;
-            box-shadow: 0 0 25px #ffbe0b, 0 0 50px #ffbe0b;
-            animation-delay: 4s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
-        }
-
         /* Contenedor principal */
         .container {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 40px;
-            width: 400px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
             position: relative;
-            overflow: hidden;
+            width: 380px;
+            padding: 50px 40px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 20px;
+            color: #fff;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(255, 0, 102, 0.5), 0 0 40px rgba(0, 255, 255, 0.3);
         }
 
         .container::before {
             content: '';
             position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, #ff006e, #8338ec, #06ffa5, #00d4ff, #ffbe0b);
-            border-radius: 20px;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            background: linear-gradient(45deg, #ff0066, #00ffff, #ff0066, #00ffff);
+            background-size: 400% 400%;
+            border-radius: 25px;
+            filter: blur(10px);
             z-index: -1;
-            animation: borderGlow 3s linear infinite;
+            animation: neonBorderAnimation 8s linear infinite;
         }
 
-        @keyframes borderGlow {
-            0% { filter: hue-rotate(0deg); }
-            100% { filter: hue-rotate(360deg); }
+        @keyframes neonBorderAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
+
+        /* Paleta de colores neón */
+        .neon-palette {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .color-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        .color-dot:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 15px currentColor;
+        }
+
+        .color-dot.pink { background: #ff0066; }
+        .color-dot.cyan { background: #00ffff; }
+        .color-dot.purple { background: #9d4edd; }
+        .color-dot.green { background: #39ff14; }
+        .color-dot.yellow { background: #ffff00; }
+        .color-dot.orange { background: #ff6600; }
 
         /* Pestañas */
         .tabs {
@@ -113,6 +95,7 @@
             border-radius: 15px;
             background: rgba(255, 255, 255, 0.1);
             overflow: hidden;
+            position: relative;
         }
 
         .tab {
@@ -122,22 +105,43 @@
             cursor: pointer;
             background: transparent;
             border: none;
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 16px;
+            color: #ccc;
+            font-size: 20px;
             font-weight: 600;
             transition: all 0.3s ease;
             position: relative;
         }
 
         .tab.active {
-            color: #fff;
-            background: linear-gradient(45deg, #ff006e, #8338ec);
-            box-shadow: 0 0 20px rgba(255, 0, 110, 0.5);
+            color: #ff0066;
         }
 
         .tab:hover:not(.active) {
-            background: rgba(255, 255, 255, 0.1);
             color: #fff;
+        }
+
+        /* Línea divisoria entre pestañas */
+        .tab:first-child::after {
+            content: '';
+            position: absolute;
+            top: 20%;
+            right: 0;
+            width: 2px;
+            height: 60%;
+            background: linear-gradient(to bottom, transparent, #ff0066, #00ffff, transparent);
+            box-shadow: 0 0 8px rgba(255, 0, 102, 0.6);
+            animation: dividerPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes dividerPulse {
+            0%, 100% { 
+                opacity: 0.7; 
+                box-shadow: 0 0 8px rgba(255, 0, 102, 0.6);
+            }
+            50% { 
+                opacity: 1; 
+                box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+            }
         }
 
         /* Formularios */
@@ -162,18 +166,19 @@
 
         .form-group label {
             display: block;
-            color: rgba(255, 255, 255, 0.8);
+            color: #ccc;
             margin-bottom: 8px;
             font-weight: 500;
             font-size: 14px;
+            text-align: left;
         }
 
         .form-group input {
             width: 100%;
             padding: 15px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            border: 2px solid #999;
             border-radius: 10px;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.5);
             color: #fff;
             font-size: 16px;
             transition: all 0.3s ease;
@@ -181,22 +186,22 @@
 
         .form-group input:focus {
             outline: none;
-            border-color: #ff006e;
-            box-shadow: 0 0 20px rgba(255, 0, 110, 0.3);
-            background: rgba(255, 255, 255, 0.1);
+            border-color: #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            background: rgba(0, 0, 0, 0.7);
         }
 
         .form-group input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+            color: #999;
         }
 
         /* Botones */
         .neon-button {
             width: 100%;
             padding: 15px;
-            border: none;
+            border: 2px solid transparent;
             border-radius: 10px;
-            background: linear-gradient(45deg, #ff006e, #8338ec);
+            background: linear-gradient(45deg, #ff0066, #00ffff);
             color: #fff;
             font-size: 16px;
             font-weight: 600;
@@ -211,21 +216,23 @@
         .neon-button::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .neon-button:hover::before {
-            left: 100%;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ff0066, #00ffff, #ff0066, #00ffff);
+            background-size: 400% 400%;
+            filter: blur(6px);
+            border-radius: 12px;
+            z-index: -1;
+            animation: neonBorderAnimation 6s linear infinite;
         }
 
         .neon-button:hover {
+            color: #000;
+            background-color: #00ffff;
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(255, 0, 110, 0.4);
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.4);
         }
 
         /* Links */
@@ -233,38 +240,37 @@
             display: block;
             text-align: center;
             margin-top: 20px;
-            color: #06ffa5;
-            text-decoration: none;
+            color: #ff0066;
+            text-decoration: underline;
             font-size: 14px;
             transition: all 0.3s ease;
         }
 
         .forgot-password:hover {
-            color: #fff;
-            text-shadow: 0 0 10px #06ffa5;
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff;
         }
 
         /* Título */
         .title {
-            text-align: center;
-            color: #fff;
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            text-shadow: 0 0 20px rgba(255, 0, 110, 0.5);
+            margin-bottom: 5px;
+            font-size: 32px;
+            color: #00ffff;
+            font-weight: bold;
+            text-shadow: 0 0 5px #ff0066;
         }
 
         .subtitle {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 14px;
             margin-bottom: 30px;
+            font-style: italic;
+            color: #ccc;
+            font-size: 14px;
         }
 
         /* Mensajes de error */
         .error-message {
-            background: rgba(255, 68, 68, 0.1);
-            border: 1px solid #ff4444;
+            background: rgba(255, 0, 102, 0.1);
+            border: 1px solid #ff0066;
             border-radius: 10px;
             padding: 15px;
             margin-bottom: 20px;
@@ -278,7 +284,7 @@
         }
 
         .error-message li {
-            color: #ff6b6b;
+            color: #ff0066;
             font-size: 14px;
             margin-bottom: 5px;
         }
@@ -300,15 +306,16 @@
 
         /* Mensajes de éxito */
         .success-message {
-            background: rgba(6, 255, 165, 0.1);
-            border: 1px solid #06ffa5;
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid #00ffff;
             border-radius: 10px;
             padding: 15px;
             margin-bottom: 20px;
-            color: #06ffa5;
+            color: #00ffff;
             font-size: 14px;
             animation: slideIn 0.3s ease-out;
         }
+
         .checkbox-group {
             display: flex;
             align-items: center;
@@ -319,12 +326,14 @@
             width: auto;
             margin-right: 10px;
             transform: scale(1.2);
+            accent-color: #ff0066;
         }
 
         .checkbox-group label {
             margin-bottom: 0;
             font-size: 14px;
             cursor: pointer;
+            color: #ccc;
         }
 
         /* Efectos de carga */
@@ -339,7 +348,7 @@
             width: 30px;
             height: 30px;
             border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top: 3px solid #ff006e;
+            border-top: 3px solid #ff0066;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 0 auto 10px;
@@ -360,23 +369,38 @@
             .title {
                 font-size: 24px;
             }
+            
+            .neon-palette {
+                top: 10px;
+                right: 10px;
+                gap: 6px;
+            }
+            
+            .color-dot {
+                width: 10px;
+                height: 10px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="bg-animation">
-        <div class="neon-circle"></div>
-        <div class="neon-circle"></div>
-        <div class="neon-circle"></div>
-    </div>
-
     <div class="container">
-        <div class="title">SISTEMA NEÓN</div>
-        <div class="subtitle">Bienvenido al futuro</div>
+        <!-- Paleta de colores neón -->
+        <div class="neon-palette">
+            <div class="color-dot pink" onclick="changeTheme('pink')" title="Rosa Neón"></div>
+            <div class="color-dot cyan" onclick="changeTheme('cyan')" title="Cian Neón"></div>
+            <div class="color-dot purple" onclick="changeTheme('purple')" title="Púrpura Neón"></div>
+            <div class="color-dot green" onclick="changeTheme('green')" title="Verde Neón"></div>
+            <div class="color-dot yellow" onclick="changeTheme('yellow')" title="Amarillo Neón"></div>
+            <div class="color-dot orange" onclick="changeTheme('orange')" title="Naranja Neón"></div>
+        </div>
+
+        <div class="title">TECNO PLUS TOYS</div>
+        <div class="subtitle">PREVIENE. REPARA. OPTIMIZA</div>
 
         <div class="tabs">
-            <button class="tab active" onclick="switchTab('login')">Iniciar Sesión</button>
-            <button class="tab" onclick="switchTab('register')">Registrarse</button>
+            <button class="tab active" onclick="switchTab('login')">INICIAR SESIÓN</button>
+            <button class="tab" onclick="switchTab('register')">REGISTRARSE</button>
         </div>
 
         <!-- Formulario de Login -->
@@ -396,24 +420,24 @@
                 @endif
                 
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="tu@email.com" 
+                    <label for="email">EMAIL</label>
+                    <input type="email" id="email" name="email" placeholder="Analizame@gmail.com" 
                            value="{{ old('email') }}" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="password">Contraseña</label>
+                    <label for="password">CONTRASEÑA</label>
                     <input type="password" id="password" name="password" placeholder="••••••••" required>
                 </div>
                 
                 <div class="checkbox-group">
                     <input type="checkbox" id="remember" name="remember" {{ old('remember') ? 'checked' : '' }}>
-                    <label for="remember">Recordarme</label>
+                    <label for="remember">RECORDARME</label>
                 </div>
                 
-                <button type="submit" class="neon-button">Iniciar Sesión</button>
+                <button type="submit" class="neon-button">INICIAR SESIÓN</button>
                 
-                <a href="{{ route('password.request') }}" class="forgot-password">¿Olvidaste tu contraseña?</a>
+                <a href="{{ route('password.request') }}" class="forgot-password">¿OLVIDASTE TU CONTRASEÑA?</a>
             </form>
         </div>
 
@@ -434,40 +458,40 @@
                 @endif
                 
                 <div class="form-group">
-                    <label for="name">Nombre Completo</label>
+                    <label for="name">NOMBRE COMPLETO</label>
                     <input type="text" id="name" name="name" placeholder="Tu nombre completo" 
                            value="{{ old('name') }}" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="email_register">Email</label>
-                    <input type="email" id="email_register" name="email" placeholder="tu@email.com" 
+                    <label for="email_register">EMAIL</label>
+                    <input type="email" id="email_register" name="email" placeholder="Analizame@gmail.com" 
                            value="{{ old('email') }}" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="password_register">Contraseña</label>
+                    <label for="password_register">CONTRASEÑA</label>
                     <input type="password" id="password_register" name="password" placeholder="••••••••" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="password_confirmation">Confirmar Contraseña</label>
+                    <label for="password_confirmation">CONFIRMAR CONTRASEÑA</label>
                     <input type="password" id="password_confirmation" name="password_confirmation" placeholder="••••••••" required>
                 </div>
                 
                 <div class="checkbox-group">
                     <input type="checkbox" id="terms" name="terms" required>
-                    <label for="terms">Acepto los términos y condiciones</label>
+                    <label for="terms">ACEPTO LOS TÉRMINOS Y CONDICIONES</label>
                 </div>
                 
-                <button type="submit" class="neon-button">Crear Cuenta</button>
+                <button type="submit" class="neon-button">CREAR CUENTA</button>
             </form>
         </div>
 
         <!-- Indicador de carga -->
         <div class="loading" id="loading">
             <div class="spinner"></div>
-            <p>Procesando...</p>
+            <p>PROCESANDO...</p>
         </div>
     </div>
 
@@ -480,6 +504,47 @@
             // Activar pestaña seleccionada
             event.target.classList.add('active');
             document.getElementById(tab + '-form').classList.add('active');
+        }
+
+        function changeTheme(color) {
+            const root = document.documentElement;
+            const colorMap = {
+                'pink': { primary: '#ff0066', secondary: '#ff3399' },
+                'cyan': { primary: '#00ffff', secondary: '#66ffff' },
+                'purple': { primary: '#9d4edd', secondary: '#c77dff' },
+                'green': { primary: '#39ff14', secondary: '#7fff00' },
+                'yellow': { primary: '#ffff00', secondary: '#ffff66' },
+                'orange': { primary: '#ff6600', secondary: '#ff9933' }
+            };
+            
+            const colors = colorMap[color];
+            if (colors) {
+                // Cambiar colores del título
+                document.querySelector('.title').style.color = colors.primary;
+                document.querySelector('.title').style.textShadow = `0 0 5px ${colors.secondary}`;
+                
+                // Cambiar colores de las pestañas activas
+                document.querySelectorAll('.tab.active').forEach(tab => {
+                    tab.style.color = colors.primary;
+                });
+                
+                // Cambiar colores de los enlaces
+                document.querySelectorAll('.forgot-password').forEach(link => {
+                    link.style.color = colors.primary;
+                });
+                
+                // Efecto visual en el punto seleccionado
+                document.querySelectorAll('.color-dot').forEach(dot => {
+                    dot.style.transform = 'scale(1)';
+                    dot.style.border = '1px solid rgba(255, 255, 255, 0.3)';
+                });
+                
+                const selectedDot = document.querySelector(`.color-dot.${color}`);
+                if (selectedDot) {
+                    selectedDot.style.transform = 'scale(1.3)';
+                    selectedDot.style.border = '2px solid #fff';
+                }
+            }
         }
 
         function showLoading(form) {
@@ -514,10 +579,10 @@
             const confirmation = this.value;
             
             if (password !== confirmation && confirmation.length > 0) {
-                this.style.borderColor = '#ff4444';
-                this.style.boxShadow = '0 0 20px rgba(255, 68, 68, 0.3)';
+                this.style.borderColor = '#ff0066';
+                this.style.boxShadow = '0 0 20px rgba(255, 0, 102, 0.3)';
             } else {
-                this.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                this.style.borderColor = '#999';
                 this.style.boxShadow = 'none';
             }
         });

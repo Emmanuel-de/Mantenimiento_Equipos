@@ -7,6 +7,7 @@ use App\Models\Equipo;
 use App\Models\Catalogo\TipoIncidencia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 
 class IncidenciaController extends Controller

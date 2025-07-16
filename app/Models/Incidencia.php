@@ -10,7 +10,9 @@ class Incidencia extends Model
 
     protected $fillable = [
         'equipo_id',
+        'tipo_incidencia_id',
         'fecha',
+        'fecha_reporte',
         'descripcion',
         'reportado_por',
         'estado',
@@ -19,9 +21,20 @@ class Incidencia extends Model
         'evidencia',
     ];
 
+    protected $casts = [
+        'fecha' => 'date',
+        'fecha_reporte' => 'date',
+    ];
+
     public function equipo()
     {
         return $this->belongsTo(Equipo::class);
     }
+
+    public function tipoIncidencia()
+    {
+        return $this->belongsTo(\App\Models\Catalogo\TipoIncidencia::class, 'tipo_incidencia_id');
+    }
 }
+
 
