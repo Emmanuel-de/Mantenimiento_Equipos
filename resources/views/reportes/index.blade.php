@@ -116,14 +116,14 @@
 
     {{-- Botones de exportación --}}
     <div class="flex gap-4">
-        <form method="GET" action="{{ route('reportes.export') }}">
+        <form method="GET" action="{{ route('exportar.reporte.general.excel') }}">
             <input type="hidden" name="format" value="excel">
             <button class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">
                 Exportar a Excel
             </button>
         </form>
 
-        <form method="GET" action="{{ route('reportes.export') }}">
+        <form method="GET" action="{{ route('exportar.pdf') }}">
             <input type="hidden" name="format" value="pdf">
             <button class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition">
                 Exportar a PDF
