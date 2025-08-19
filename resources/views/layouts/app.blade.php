@@ -10,12 +10,12 @@
 <body class="flex min-h-screen bg-gray-100">
 
 <!-- BARRA ALADO -->
-    <aside class="flex flex-col bg-sky-700 text-white w-64 p-4">
+    <aside class="flex flex-col bg-sky-700 text-white w-64 p-5">
 
         <!-- LOGO -->
         <div class="flex items-center justify-between mb-6">
             <div class="flex items-center space-x-2">
-                <div class="bg-white rounded-full w-10 h-10 flex items-center justify-center text-red-900 font-bold text-xl">★</div>
+                <div class="bg-white rounded-full w-10 h-10 flex items-center justify-center text-red-900 font-bold text-xl">💻</div>
                 <span class="font-semibold text-lg">Mantenimiento de Equipos</span>
             </div>
             <button class="text-white text-2xl md:hidden">
@@ -105,13 +105,13 @@
 
 <!-- Perfil y Logout -->
             @auth
-            <div class="flex items-center gap-3 p-3 rounded bg-sky-800 bg-opacity-40">
+            <div class="flex items-center gap-3 p-3 rounded bg-orange-700 bg-opacity-40">
                 <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-sky-700 font-bold">
                     {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                 </div>
                 <div class="flex-1">
                     <p class="font-semibold text-sm truncate">{{ Auth::user()->name }}</p>
-                    <p class="text-xs text-sky-200">
+                    <p class="text-xs text-orange-200">
                         {{ Auth::user()->role ?? 'Usuario' }}
                     </p>
                 </div>
@@ -123,13 +123,13 @@
                 </form>
             </div>
             @else
-            <div class="flex items-center gap-3 p-3 rounded bg-sky-800 bg-opacity-40">
+            <div class="flex items-center gap-3 p-3 rounded bg-orange-700 bg-opacity-40">
                 <div class="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center text-white">
                     <i class="fas fa-user"></i>
                 </div>
                 <div class="flex-1">
                     <p class="font-semibold text-sm">Invitado</p>
-                    <p class="text-xs text-sky-200">Sin autenticar</p>
+                    <p class="text-xs text-orange-200">Sin autenticar</p>
                 </div>
                 <a href="{{ route('login') }}" class="text-white hover:text-green-300 transition-colors" title="Iniciar sesión">
                     <i class="fas fa-sign-in-alt"></i>

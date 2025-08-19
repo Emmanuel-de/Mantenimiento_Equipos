@@ -30,6 +30,11 @@ class Equipo extends Model
         return $this->belongsTo(Departamento::class);
     }
 
+    public function empleado()
+    {
+        return $this->belongsTo(Empleado::class);
+    }
+
     public function mantenimientos()
 {
     return $this->hasMany(Mantenimiento::class);

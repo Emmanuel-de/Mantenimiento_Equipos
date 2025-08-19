@@ -35,7 +35,7 @@
                             <td class="px-6 py-4 whitespace-nowrap">{{ $incidencia->equipo->nombre ?? 'N/A' }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $incidencia->tipoIncidencia->nombre ?? 'N/A' }}</td>
                             <td class="px-6 py-4">{{ Str::limit($incidencia->descripcion, 50) }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ $incidencia->fecha_reporte->format('d/m/Y') }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">{{ $incidencia->fecha_reporte ? $incidencia->fecha_reporte->format('d/m/Y') : 'N/A' }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="px-2 py-1 text-xs rounded-full {{ $incidencia->estado == 'resuelto' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
                                     {{ ucfirst($incidencia->estado) }}
